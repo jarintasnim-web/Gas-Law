@@ -1,0 +1,125 @@
+import streamlit as st
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Page configuration
+st.set_page_config(page_title="Shikho Gas Laws Simulator", layout="wide")
+
+# Custom CSS for Shikho Brand Guidelines
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Gibson', 'Hind Siliguri', sans-serif;
+    }
+    
+    /* Primary Colors */
+    h1, h2, h3 {
+        color: #354894; /* Shikho Blue */
+    }
+    
+    .stSlider > div > div > div > div {
+        background-color: #CF278D !important; /* Shikho Pink */
+    }
+    
+    .stButton>button {
+        color: white;
+        background-color: #CF278D;
+        border: none;
+        border-radius: 5px;
+    }
+    .stButton>button:hover {
+        background-color: #354894;
+        color: white;
+    }
+    
+    .highlight {
+        color: #CF278D;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("Shikho: Gas Laws Simulator")
+st.markdown("Physics abong Chemistry er gas laws gulo interactive bhabe <span class='highlight'>shekho</span>!", unsafe_allow_html=True)
+
+# Sidebar selection
+law = st.sidebar.radio(
+    "Select a Gas Law:",
+    ("Boyle's Law", "Charles's Law", "Avogadro's Law")
+)
+
+# Shikho Brand Colors for plots
+shikho_blue = '#354894'
+shikho_pink = '#CF278D'
+shikho_yellow = '#EFAD1E'
+
+if law == "Boyle's Law":
+    st.header("Boyle's Law (P ∝ 1/V)")
+    st.write("Konstant temperature e, ekti nirdishto poriman gas er pressure tar volume er bastanupatik.")
+    
+    volume = st.slider("Volume (V) in Liters", min_value=1.0, max_value=20.0, value=10.0, step=0.5)
+    k = 100 # constant (P*V)
+    pressure = k / volume
+    
+    st.subheader(f"Current Pressure (P): {pressure:.2f} atm")
+    
+    # Plot
+    v_array = np.linspace(1, 20, 100)
+    p_array = k / v_array
+    
+    fig, ax = plt.subplots(figsize=(6,4))
+    ax.plot(v_array, p_array, color=shikho_blue, linewidth=2, label="P vs V Curve")
+    ax.scatter([volume], [pressure], color=shikho_pink, s=100, zorder=5, label="Current State")
+    ax.set_xlabel("Volume (V)")
+    ax.set_ylabel("Pressure (P)")
+    ax.legend()
+    st.pyplot(fig)
+
+elif law == "Charles's Law":
+    st.header("Charles's Law (V ∝ T)")
+    st.write("Konstant pressure e, ekti nirdishto poriman gas er volume tar absolute temperature er somanupatik.")
+    
+    temp = st.slider("Temperature (T) in Kelvin", min_value=100, max_value=500, value=300, step=10)
+    k = 0.05 # constant (V/T)
+    volume = k * temp
+    
+    st.subheader(f"Current Volume (V): {volume:.2f} Liters")
+    
+    # Plot
+    t_array = np.linspace(100, 500, 100)
+    v_array = k * t_array
+    
+    fig, ax = plt.subplots(figsize=(6,4))
+    ax.plot(t_array, v_array, color=shikho_yellow, linewidth=2, label="V vs T Curve")
+    ax.scatter([temp], [volume], color=shikho_pink, s=100, zorder=5, label="Current State")
+    ax.set_xlabel("Temperature (K)")
+    ax.set_ylabel("Volume (V)")
+    ax.legend()
+    st.pyplot(fig)
+
+elif law == "Avogadro's Law":
+    st.header("Avogadro's Law (V ∝ n)")
+    st.write("Konstant temperature abong pressure e, gas er volume tar mole shongkhar somanupatik.")
+    
+    moles = st.slider("Number of Moles (n)", min_value=1.0, max_value=10.0, value=5.0, step=0.5)
+    k = 22.4 # constant (V/n) at STP
+    volume = k * moles
+    
+    st.subheader(f"Current Volume (V): {volume:.2f} Liters")
+    
+    # Plot
+    n_array = np.linspace(1, 10, 100)
+    v_array = k * n_array
+    
+    fig, ax = plt.subplots(figsize=(6,4))
+    ax.plot(n_array, v_array, color=shikho_blue, linewidth=2, label="V vs n Curve")
+    ax.scatter([moles], [volume], color=shikho_pink, s=100, zorder=5, label="Current State")
+    ax.set_xlabel("Moles (n)")
+    ax.set_ylabel("Volume (V)")
+    ax.legend()
+    st.pyplot(fig)
+
+st.markdown("---")
+st.markdown("**DIGITAL LEARNING** by Shikho")
